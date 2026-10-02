@@ -33,21 +33,29 @@ TIM2 -> ARR = 0xFFFF;
 TIM2 -> CNT=0;
 TIM2 -> EGR|= TIM_EGR_UG;
 TIM2 -> SR &=~ TIM_SR_UIF;
-TIM2 -> CR1 |= TIM_CR1_CEN; 
+
 }
 
 void delay_us(uint32_t us){
-volatile int t_actual=0;
-volatile int t_inicial = TIM2 -> CNT;
-    while(t_actual > us){
-        t_actual=(TIM2 -> CNT - t_inicial);
-    }
+    TIM2 -> CR1 |= TIM_CR1_CEN;
+    TIM2 -> CNT=0; 
+    volatile int t_actual=0;
+    volatile int t_inicial = TIM2 -> CNT;
+        while(t_actual > us){
+            t_actual=(TIM2 -> CNT - t_inicial);
+        }
+    TIM2 -> CNT=0; 
+    TIM2 -> CR1 &=~ TIM_CR1_CEN;
 }
 
 void delay_ms(uint32_t ms){
-    volatile int t_actual=0;
-    volatile int t_inicial = (TIM2 -> CNT)/1000;
-        while(t_actual > ms){
-        t_actual=((TIM2 -> CNT)/1000 - t_inicial);
-    }
+    TIM2 -> CR1 |= TIM_CR1_CEN;
+    TIM2 -> CNT=0; 
+        volatile int t_actual=0;
+        volatile int t_inicial = (TIM2 -> CNT)/1000;
+            while(t_actual > ms){
+            t_actual=((TIM2 -> CNT)/1000 - t_inicial);
+        }
+    TIM2 -> CNT=0; 
+    TIM2 -> CR1 &=~ TIM_CR1_CEN;
 }
