@@ -1,5 +1,5 @@
-#ifndef ADC_H
-#define ADC_H
+#ifndef TIMER_H
+#define TIMER_H
 
 #include "stm32f103xb.h"
 #include "stdint.h"
